@@ -1,0 +1,13 @@
+  upstream appservers {
+    {% for host in groups['appservers'] %}
+    server {{ hostvars[host]['ip'] }};
+    {% endfor %}
+  }
+
+  server {
+    listen 81;
+
+    location / {
+      proxy_pass http://appservers;
+    }
+  }

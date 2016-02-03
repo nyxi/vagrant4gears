@@ -1,0 +1,26 @@
+---
+- hosts: all
+  sudo: yes
+  tasks:
+  - name: update all
+    apt: update_cache=yes upgrade=dist
+  - name: ensure nginx is installed
+    apt: name=nginx state=present
+  - name: ensure nginx is enable and in running state
+    service: name=nginx state=started enabled=yes
+
+- hosts: appservers
+  sudo: yes
+  tasks:
+  - name: configure nginx landing page
+    copy: content={{ ansible_hostname }} dest=/var/www/html/index.nginx-debian.html
+
+- hosts: loadbalancers
+  sudo: yes
+  handlers:
+  - name: reload nginx
+    service: name=nginx state=restarted
+  tasks:
+  - name: configure nginx
+    template: src=nginx_site.conf.j2 dest=/etc/nginx/conf.d/lb.conf
+    notify: reload nginx
