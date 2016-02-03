@@ -7,6 +7,12 @@ Debian + nginx in round robin setup listening on port 81, forwarding requests to
 ### Application servers
 Debian + nginx with static page containing only the node's name.
 
+## Setup
+```
+$ vagrant init
+$ vagrant up
+```
+
 ## RR test
 ```
 # pip install -r requirements.txt
